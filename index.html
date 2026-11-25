@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3a4f8c">
+  <title>Weigh-in</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="vendor/uPlot.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Weigh-in</h1>
+    <button id="settings-toggle" type="button" aria-expanded="false">Settings</button>
+  </header>
+
+  <main>
+    <form id="settings" hidden>
+      <h2>Settings</h2>
+      <label>Units
+        <select name="units">
+          <option value="kg">kg</option>
+          <option value="lb">lb</option>
+        </select>
+      </label>
+      <label>Week starts on
+        <select name="weekStart">
+          <option value="1">Monday</option>
+          <option value="0">Sunday</option>
+        </select>
+      </label>
+      <button type="submit">Save settings</button>
+    </form>
+
+    <form id="entry">
+      <h2>Log weight</h2>
+      <label>Date <input name="date" type="date" required></label>
+      <label><span>Weight (<span class="unit">kg</span>)</span> <input name="weight" type="number" min="0" step="0.1" inputmode="decimal" required></label>
+      <p class="hint">Replaces that day's weight if there already is one.</p>
+      <button type="submit">Save</button>
+    </form>
+
+    <section id="trend-section">
+      <h2>Weekly average</h2>
+      <div id="trend"></div>
+      <p id="trend-empty" class="hint">Log a weight to see the trend.</p>
+      <p id="trend-legend" class="hint" hidden><span class="swatch solid"></span> complete weeks <span class="swatch dashed"></span> current week (still moving)</p>
+    </section>
+
+    <section>
+      <h2>Weeks</h2>
+      <div class="table-wrap">
+        <table id="weeks"></table>
+      </div>
+      <p id="empty" class="hint">Nothing logged yet.</p>
+    </section>
+
+    <section>
+      <h2>Data</h2>
+      <p class="hint">CSV with one row per day. Importing replaces any days in the file and keeps the rest.</p>
+      <div class="row">
+        <button id="export" type="button">Export CSV</button>
+        <label class="button">Import CSV <input id="import" type="file" accept=".csv,text/csv" hidden></label>
+      </div>
+    </section>
+  </main>
+
+  <script src="vendor/uPlot.iife.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
