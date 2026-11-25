@@ -40,6 +40,7 @@ async function tx(mode, fn) {
 const getDays = () => tx('readonly', s => s.getAll());
 const putDays = days => tx('readwrite', s => days.forEach(day => s.put(day)));
 const deleteDay = date => tx('readwrite', s => s.delete(date));
+const getDay = date => tx('readonly', s => s.get(date));
 
 // --- Dates -----------------------------------------------------------------
 // Dates are plain 'YYYY-MM-DD' strings. Arithmetic is done in UTC so DST never shifts a day.
@@ -300,6 +301,8 @@ entryForm.addEventListener('submit', async e => {
   const weight = num(entryForm.weight.value);
   if (weight == null || !(weight > 0)) return;
   const date = entryForm.date.value;
+  const existing = await getDay(date);
+  if (existing && !confirm(`${formatDate(date)} already has ${fmt(existing.weightKg)} ${settings.units}. Replace it with ${round(weight).toFixed(1)} ${settings.units}?`)) return;
   entryForm.weight.value = '';
   await putDays([{ date, weightKg: fromDisplayWeight(weight, settings.units) }]);
   render();
